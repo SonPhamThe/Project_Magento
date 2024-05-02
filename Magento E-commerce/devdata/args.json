@@ -1,0 +1,142 @@
+{
+    "categories": [
+        {
+            "name": "Women",
+            "subcategories": [
+                {
+                    "name": "Tops",
+                    "subcategories": [
+                        {
+                            "name": "Jackets",
+                            "products": [
+                                {
+                                    "name": "Women's Jacket 1",
+                                    "color": [
+                                        "Black",
+                                        "Blue",
+                                        "Red"
+                                    ],
+                                    "size": [
+                                        "S",
+                                        "M",
+                                        "L"
+                                    ]
+                                },
+                                {
+                                    "name": "Women's Jacket 2",
+                                    "color": [
+                                        "Green",
+                                        "Yellow",
+                                        "Purple"
+                                    ],
+                                    "size": [
+                                        "M",
+                                        "L",
+                                        "XL"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Tees",
+                            "products": [
+                                {
+                                    "name": "Women's Tee 1",
+                                    "color": [
+                                        "White",
+                                        "Gray",
+                                        "Pink"
+                                    ],
+                                    "size": [
+                                        "XS",
+                                        "S",
+                                        "M"
+                                    ]
+                                },
+                                {
+                                    "name": "Women's Tee 2",
+                                    "color": [
+                                        "Black",
+                                        "Blue",
+                                        "Green"
+                                    ],
+                                    "size": [
+                                        "S",
+                                        "M",
+                                        "L"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Bras",
+                            "products": [
+                                {
+                                    "name": "Women's Bra 1",
+                                    "color": [
+                                        "Nude",
+                                        "Black",
+                                        "White"
+                                    ],
+                                    "size": [
+                                        "32A",
+                                        "34B",
+                                        "36C"
+                                    ]
+                                },
+                                {
+                                    "name": "Women's Bra 2",
+                                    "color": [
+                                        "Blue",
+                                        "Pink",
+                                        "Purple"
+                                    ],
+                                    "size": [
+                                        "34B",
+                                        "36C",
+                                        "38D"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Tanks",
+                            "products": [
+                                {
+                                    "name": "Women's Tank Top 1",
+                                    "color": [
+                                        "Red",
+                                        "Green",
+                                        "Blue"
+                                    ],
+                                    "size": [
+                                        "S",
+                                        "M",
+                                        "L"
+                                    ]
+                                },
+                                {
+                                    "name": "Women's Tank Top 2",
+                                    "color": [
+                                        "Black",
+                                        "White",
+                                        "Gray"
+                                    ],
+                                    "size": [
+                                        "S",
+                                        "M",
+                                        "L"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bottoms",
+                    "subcategories": []
+                }
+            ]
+        }
+    ]
+}
