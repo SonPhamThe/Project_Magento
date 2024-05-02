@@ -7,8 +7,10 @@ Documentation
 Library             RPA.Browser.Selenium
 Library             DOP.RPA.Log
 Library             DOP.RPA.Asset
+Library             DOP.RPA.ProcessArgument
 Library             RPA.Excel.Files
-Library             libraries/ProductDataExtractor.py
+Library             Collections
+Library             String
 Resource            resources/login_page.robot
 Resource            resources/mouse_action.robot
 
@@ -16,14 +18,40 @@ Suite Setup         Open Browser And Maximize Window    ${URL_PAGE_MAGENTO}
 
 
 *** Variables ***
-${URL_PAGE_MAGENTO}             https://magento.softwaretestingboard.com/
-${DATA_MAGENTO}                 Data Magento E-commerce.xlsx
+${URL_PAGE_MAGENTO}     https://magento.softwaretestingboard.com/
+${DATA_MAGENTO}         Data Magento E-commerce.xlsx
+
+${ID_MEN}               ui-id-5
+${ID_TOPS_MEN}          ui-id-17
+${ID_JACKETS_MEN}       ui-id-19
+${ID_HOODIES_MEN}       ui-id-20
+${ID_TEES_MEN}          ui-id-21
+${ID_TANKS_MEN}         ui-id-22
+${ID_BOTTOMS_MEN}       ui-id-18
+${ID_PANTS_MEN}         ui-id-23
+${ID_SHORTS_MEN}        ui_id_24
+
+${ID_WOMEN}             ui-id-4
+${ID_TOPS_WOMEN}        ui-id-9
+${ID_JACKETS_WOMEN}     ui-id-11
+${ID_HOODIES_WOMEN}     ui-id-12
+${ID_TEES_WOMEN}        ui-id-13
+${ID_TANKS_WOMEN}       ui-id-14
+${ID_BOTTOMS_WOMEN}     ui-id-10
+${ID_PANTS_WOMEN}       ui-id-15
+${ID_SHORTS_WOMEN}      ui_id_16
+
+${ID_GEAR}              ui-id-6
+${ID_BAGS_GEAR}         ui-id-25
+${ID_FITNESS_GEAR}      ui-id-26
+${ID_WATCHES_GEAR}      ui-id-27
 
 
 *** Tasks ***
 Automated E-commerce Shopping
     Login With Magento Credentials
-    Choose Product Specifications
+    Choose Each Product
+    Check All Product
     Close All Browsers
 
 
@@ -36,6 +64,7 @@ Login With Magento Credentials
     Click Link    link:Sign In
     ${meganto_account_credentials}=    Get Asset    meganto_account
     ${meganto_account_credentials}=    Set Variable    ${meganto_account_credentials}[value]
+
     Wait Until Keyword Succeeds
     ...    3x
     ...    1s
@@ -46,107 +75,135 @@ Login With Magento Credentials
     ...    ${meganto_account_credentials}[password_meganto]
     ...    css=span.customer-name
 
-Choose Product Specifications
-    ${data_magento_path}=    Set Variable    ${EXECDIR}${/}devdata${/}${DATA_MAGENTO}
-    ${products_data}=    Extract Product Data    ${data_magento_path}
-    FOR    ${product_data}    IN    @{products_data}
-        Log    ${product_data}
-        Choose Each Product    ${product_data}
-    END
-
 Choose Each Product
     [Documentation]    Clicks on the product link based on the product category and type.
-    [Arguments]    ${product}
-    ${category}=    Set Variable    ${product['category']}
-    ${products_type}=    Set Variable    ${product['products_type']}
-    ${details_type}=    Set Variable    ${product['details_type']}
 
-    IF    '${category}' == 'Men'
-        Mouse Over Element    ui-id-5
-        IF    '${products_type}' == 'Tops'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-17"]
-            Mouse Over Element    ui-id-17
-            IF    '${details_type}' == 'Jackets'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-19"]
-                Mouse Over And Click Element    ui-id-19
+    ${category}=    Get In Arg    category
+    ${category_value}=    Set Variable    ${category}[value]
+
+    ${wearables}=    Get In Arg    wearables
+    ${wearables_value}=    Set Variable    ${wearables}[value]
+
+    ${product_type}=    Get In Arg    product_type
+    ${product_type_value}=    Set Variable    ${product_type}[value]
+
+    ${color}=    Get In Arg    wearables
+    ${color_value}=    Set Variable    ${color}[value]
+
+    ${size}=    Get In Arg    wearables
+    ${size_value}=    Set Variable    ${size}[value]
+
+    ${below_price}=    Get In Arg    wearables
+    ${below_price_value}=    Set Variable    ${below_price}[value]
+
+    ${above_price}=    Get In Arg    wearables
+    ${above_price_value}=    Set Variable    ${above_price}[value]
+
+    IF    '${category_value}' == 'Men'
+        Mouse Over Element    ${ID_MEN}
+        IF    '${wearables_value}' == 'Tops'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_TOPS_MEN}"]
+            Mouse Over Element    ${ID_TOPS_MEN}
+            IF    '${product_type_value}' == 'Jackets'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_JACKETS_MEN}"]
+                Mouse Over And Click Element    ${ID_JACKETS_MEN}
             END
-            IF    '${details_type}' == 'Hoodies & Sweatshirts'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-20"]
-                Mouse Over And Click Element    ui-id-20
+            IF    '${product_type_value}' == 'Hoodies & Sweatshirts'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_HOODIES_MEN}"]
+                Mouse Over And Click Element    ${ID_HOODIES_MEN}
             END
-            IF    '${details_type}' == 'Tees'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-21"]
-                Mouse Over And Click Element    ui-id-21
+            IF    '${product_type_value}' == 'Tees'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_TEES_MEN}"]
+                Mouse Over And Click Element    ${ID_TEES_MEN}
             END
-            IF    '${details_type}' == 'Tanks'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-22"]
-                Mouse Over And Click Element    ui-id-22
+            IF    '${product_type_value}' == 'Tanks'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_TANKS_MEN}"]
+                Mouse Over And Click Element    ${ID_TANKS_MEN}
             END
         END
 
-        IF    '${products_type}' == 'Bottoms'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-18"]
-            Mouse Over Element    ui-id-18
-            IF    '${details_type}' == 'Pants'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-23"]
-                Mouse Over And Click Element    ui-id-23
+        IF    '${wearables_value}' == 'Bottoms'
+            Mouse Over Element    ${ID_BOTTOMS_MEN}
+            IF    '${product_type_value}' == 'Pants'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_PANTS_MEN}"]
+                Mouse Over And Click Element    ${ID_PANTS_MEN}
             END
-            IF    '${details_type}' == 'Shorts'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-24"]
-                Mouse Over And Click Element    ui-id-24
+            IF    '${product_type_value}' == 'Shorts'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_SHORTS_MEN}"]
+                Mouse Over And Click Element    ${ID_SHORTS_MEN}
             END
         END
     END
 
-    IF    '${category}' == 'Women'
-        Mouse Over Element    ui-id-4
-        IF    '${products_type}' == 'Tops'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-9"]
-            Mouse Over Element    ui-id-9
-            IF    '${details_type}' == 'Jackets'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-11"]
-                Mouse Over And Click Element    ui-id-11
+    IF    '${category_value}' == 'Women'
+        Mouse Over Element    ${ID_WOMEN}
+        IF    '${wearables_value}' == 'Tops'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_TOPS_WOMEN}"]
+            Mouse Over Element    ${ID_TOPS_WOMEN}
+            IF    '${product_type_value}' == 'Jackets'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_JACKETS_WOMEN}"]
+                Mouse Over And Click Element    ${ID_JACKETS_WOMEN}
             END
-            IF    '${details_type}' == 'Hoodies & Sweatshirts'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-12"]
-                Mouse Over And Click Element    ui-id-20
+            IF    '${product_type_value}' == 'Hoodies & Sweatshirts'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_HOODIES_WOMEN}"]
+                Mouse Over And Click Element    ${ID_HOODIES_WOMEN}
             END
-            IF    '${details_type}' == 'Tees'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-13"]
-                Mouse Over And Click Element    ui-id-13
+            IF    '${product_type_value}' == 'Tees'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_TEES_WOMEN}"]
+                Mouse Over And Click Element    ${ID_TEES_WOMEN}
             END
-            IF    '${details_type}' == 'Bras & Tanks'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-14"]
-                Mouse Over And Click Element    ui-id-14
+            IF    '${product_type_value}' == 'Bras & Tanks'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_TANKS_WOMEN}"]
+                Mouse Over And Click Element    ${ID_TANKS_WOMEN}
             END
         END
 
-        IF    '${products_type}' == 'Bottoms'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-10"]
-            Mouse Over Element    ui-id-10
-            IF    '${details_type}' == 'Pants'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-15"]
-                Mouse Over And Click Element    ui-id-15
+        IF    '${wearables_value}' == 'Bottoms'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_BOTTOMS_WOMEN}"]
+            Mouse Over Element    ${ID_BOTTOMS_WOMEN}
+            IF    '${product_type_value}' == 'Pants'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_PANTS_WOMEN}"]
+                Mouse Over And Click Element    ${ID_PANTS_WOMEN}
             END
-            IF    '${details_type}' == 'Shorts'
-                Wait Until Element Is Visible    xpath=//a[@id="ui-id-16"]
-                Mouse Over And Click Element    ui-id-16
+            IF    '${product_type_value}' == 'Shorts'
+                Wait Until Element Is Visible    xpath=//a[@id="${ID_SHORTS_WOMEN}"]
+                Mouse Over And Click Element    ${ID_SHORTS_WOMEN}
             END
         END
     END
 
-    IF    '${category}' == 'Gear'
-        Mouse Over Element    ui-id-6
-        IF    '${details_type}' == 'Bags'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-25"]
-            Mouse Over And Click Element    ui-id-25
+    IF    '${category_value}' == 'Gear'
+        Mouse Over Element    ${ID_GEAR}
+        IF    '${product_type_value}' == 'Bags'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_BAGS_GEAR}"]
+            Mouse Over And Click Element    ${ID_BAGS_GEAR}
         END
-        IF    '${details_type}' == 'Fitness Equipment'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-26"]
-            Mouse Over And Click Element    ui-id-26
+        IF    '${product_type_value}' == 'Fitness Equipment'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_FITNESS_GEAR}"]
+            Mouse Over And Click Element    ${ID_FITNESS_GEAR}
         END
-        IF    '${details_type}' == 'Watches'
-            Wait Until Element Is Visible    xpath=//a[@id="ui-id-27"]
-            Mouse Over And Click Element    ui-id-27
+        IF    '${product_type_value}' == 'Watches'
+            Wait Until Element Is Visible    xpath=//a[@id="${ID_WATCHES_GEAR}"]
+            Mouse Over And Click Element    ${ID_WATCHES_GEAR}
         END
     END
+
+    FOR    ${element}    IN    1    9
+        Check One Product    ${element}
+        Select Size And Color    ${size_value}    ${color_value}
+    END
+
+Check All Product
+    FOR    ${element}    IN    1    9
+        Check One Product    ${element}
+    END
+
+Check One Product
+    [Arguments]    ${index}
+    Click Element    xpath=(//ol[@class='product-items'])[1]/li[${index}]//a[@class='product-item-link']
+    Sleep    2s
+
+Select Size And Color
+    [Arguments]    ${size}    ${color}
+    Click Element    xpath=//div[@class='swatch-attribute-options clearfix']//div[@option-label='${size}']
+    Click Element    xpath=//div[@class='swatch-attribute-options clearfix']//div[@option-label='${color}']
