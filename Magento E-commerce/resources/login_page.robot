@@ -14,7 +14,7 @@ Login With Credentials
     Input Text    ${id_input_username}    ${username}
     Wait Until Element Is Visible    id=${id_input_password}    10s
     Input Password    ${id_input_password}    ${password}
-    Click Button When Visible    css=button.action.login.primary
+    Click Button When Visible    id:send2
     Assert Logged In    ${element_page}
 
 Assert Logged In
