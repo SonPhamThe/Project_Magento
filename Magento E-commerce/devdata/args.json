@@ -42,17 +42,25 @@
     "below_price": {
         "name": "below_price",
         "description": "below_price",
-        "type": "String",
+        "type": "Float",
         "direction": "IN",
-        "value": "18000", 
+        "value": "18", 
         "required": true
     },
     "above_price": {
         "name": "above_price",
         "description": "above_price",
-        "type": "String",
+        "type": "Float",
         "direction": "IN",
-        "value": "400000", 
+        "value": "50", 
+        "required": true
+    },
+    "quantity": {
+        "name": "quantity",
+        "description": "quantity",
+        "type": "Int",
+        "direction": "IN",
+        "value": "3", 
         "required": true
     }
  }
