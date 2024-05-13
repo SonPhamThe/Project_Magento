@@ -63,8 +63,9 @@ ${WATCHES_GEAR_CATEGORY_ID}     ui-id-27
 Automated E-commerce Shopping
     Login With Magento Credentials
     Choose Each Product
-    Add Product To Cart By Color, Size And Price
-    Go To Cart And Make A Payment
+
+    # Add Product To Cart By Color, Size And Price
+    # Go To Cart And Make A Payment
     Close All Browsers
 
 
@@ -82,9 +83,7 @@ Login With Magento Credentials
     ...    3x
     ...    1s
     ...    Login With Credentials
-    ...    email
     ...    ${meganto_account_credentials}[username_meganto]
-    ...    pass
     ...    ${meganto_account_credentials}[password_meganto]
     ...    css=span.customer-name
 
@@ -93,99 +92,102 @@ Choose Each Product
 
     ${category}=    Get In Arg    category
     ${category_value}=    Set Variable    ${category}[value]
+    ${category_value}=    Conver Data To Search Product    ${category_value}
 
     ${wearables}=    Get In Arg    wearables
     ${wearables_value}=    Set Variable    ${wearables}[value]
+    ${wearables_value}=    Conver Data To Search Product    ${wearables_value}
 
     ${product_type}=    Get In Arg    product_type
     ${product_type_value}=    Set Variable    ${product_type}[value]
+    ${product_type_value}=    Conver Data To Search Product    ${product_type_value}
 
     IF    '${category_value}' == 'Men'
-        Mouse Over Element    ${MEN_CATEGORY_ID}
+        Mouse Over Element    ${MEN_CATEGORY_ID}    Id men not found
         IF    '${wearables_value}' == 'Tops'
             Wait Until Element Is Visible    xpath=//a[@id="${TOPS_MEN_CATEGORY_ID}"]
-            Mouse Over Element    ${TOPS_MEN_CATEGORY_ID}
+            Mouse Over Element    ${TOPS_MEN_CATEGORY_ID}    Id tops men not found
             IF    '${product_type_value}' == 'Jackets'
                 Wait Until Element Is Visible    xpath=//a[@id="${JACKETS_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${JACKETS_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${JACKETS_MEN_CATEGORY_ID}    Id jacket men not found
             END
             IF    '${product_type_value}' == 'Hoodies & Sweatshirts'
                 Wait Until Element Is Visible    xpath=//a[@id="${HOODIES_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${HOODIES_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${HOODIES_MEN_CATEGORY_ID}    Id hoodies men not found
             END
             IF    '${product_type_value}' == 'Tees'
                 Wait Until Element Is Visible    xpath=//a[@id="${TEES_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${TEES_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${TEES_MEN_CATEGORY_ID}    Id tees men not found
             END
             IF    '${product_type_value}' == 'Tanks'
                 Wait Until Element Is Visible    xpath=//a[@id="${TANKS_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${TANKS_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${TANKS_MEN_CATEGORY_ID}    Id tanks men not found
             END
         END
 
         IF    '${wearables_value}' == 'Bottoms'
-            Mouse Over Element    ${BOTTOMS_MEN_CATEGORY_ID}
+            Mouse Over Element    ${BOTTOMS_MEN_CATEGORY_ID}    Id bottoms men not found
             IF    '${product_type_value}' == 'Pants'
                 Wait Until Element Is Visible    xpath=//a[@id="${PANTS_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${PANTS_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${PANTS_MEN_CATEGORY_ID}    Id pants men not found
             END
             IF    '${product_type_value}' == 'Shorts'
                 Wait Until Element Is Visible    xpath=//a[@id="${SHORTS_MEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${SHORTS_MEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${SHORTS_MEN_CATEGORY_ID}    Id shorts men not found
             END
         END
     END
 
     IF    '${category_value}' == 'Women'
-        Mouse Over Element    ${WOMEN_CATEGORY_ID}
+        Mouse Over Element    ${WOMEN_CATEGORY_ID}    Id women not found
         IF    '${wearables_value}' == 'Tops'
             Wait Until Element Is Visible    xpath=//a[@id="${TOPS_WOMEN_CATEGORY_ID}"]
-            Mouse Over Element    ${TOPS_WOMEN_CATEGORY_ID}
+            Mouse Over Element    ${TOPS_WOMEN_CATEGORY_ID}    Id top women not found
             IF    '${product_type_value}' == 'Jackets'
                 Wait Until Element Is Visible    xpath=//a[@id="${JACKETS_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${JACKETS_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${JACKETS_WOMEN_CATEGORY_ID}    Id jackets women not found
             END
             IF    '${product_type_value}' == 'Hoodies & Sweatshirts'
                 Wait Until Element Is Visible    xpath=//a[@id="${HOODIES_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${HOODIES_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${HOODIES_WOMEN_CATEGORY_ID}    Id hoodies women not found
             END
             IF    '${product_type_value}' == 'Tees'
                 Wait Until Element Is Visible    xpath=//a[@id="${TEES_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${TEES_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${TEES_WOMEN_CATEGORY_ID}    Id tees women not found
             END
             IF    '${product_type_value}' == 'Bras & Tanks'
                 Wait Until Element Is Visible    xpath=//a[@id="${TANKS_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${TANKS_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${TANKS_WOMEN_CATEGORY_ID}    Id bras & tanks women not found
             END
         END
 
         IF    '${wearables_value}' == 'Bottoms'
             Wait Until Element Is Visible    xpath=//a[@id="${BOTTOMS_WOMEN_CATEGORY_ID}"]
-            Mouse Over Element    ${BOTTOMS_WOMEN_CATEGORY_ID}
+            Mouse Over Element    ${BOTTOMS_WOMEN_CATEGORY_ID}    Id bottoms women not found
             IF    '${product_type_value}' == 'Pants'
                 Wait Until Element Is Visible    xpath=//a[@id="${PANTS_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${PANTS_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${PANTS_WOMEN_CATEGORY_ID}    Id pants women not found
             END
             IF    '${product_type_value}' == 'Shorts'
                 Wait Until Element Is Visible    xpath=//a[@id="${SHORTS_WOMEN_CATEGORY_ID}"]
-                Mouse Over And Click Element    ${SHORTS_WOMEN_CATEGORY_ID}
+                Mouse Over And Click Element    ${SHORTS_WOMEN_CATEGORY_ID}    Id shorts women not found
             END
         END
     END
 
     IF    '${category_value}' == 'Gear'
-        Mouse Over Element    ${GEAR_CATEGORY_ID}
+        Mouse Over Element    ${GEAR_CATEGORY_ID}    Id gear not found
         IF    '${product_type_value}' == 'Bags'
             Wait Until Element Is Visible    xpath=//a[@id="${BAGS_GEAR_CATEGORY_ID}"]
-            Mouse Over And Click Element    ${BAGS_GEAR_CATEGORY_ID}
+            Mouse Over And Click Element    ${BAGS_GEAR_CATEGORY_ID}    Id bags not found
         END
         IF    '${product_type_value}' == 'Fitness Equipment'
             Wait Until Element Is Visible    xpath=//a[@id="${FITNESS_GEAR_CATEGORY_ID}"]
-            Mouse Over And Click Element    ${FITNESS_GEAR_CATEGORY_ID}
+            Mouse Over And Click Element    ${FITNESS_GEAR_CATEGORY_ID}    Id fitness equipment not found
         END
         IF    '${product_type_value}' == 'Watches'
             Wait Until Element Is Visible    xpath=//a[@id="${WATCHES_GEAR_CATEGORY_ID}"]
-            Mouse Over And Click Element    ${WATCHES_GEAR_CATEGORY_ID}
+            Mouse Over And Click Element    ${WATCHES_GEAR_CATEGORY_ID}    Id watches not found
         END
     END
 
@@ -198,10 +200,10 @@ Add Product To Cart By Color, Size And Price
         ${product_links}=    Get Product Links
         FOR    ${link}    IN    @{product_links}
             Go To    ${link}
-            Wait Until Element Is Visible    id:product-addtocart-button
             ${check_product_to_cart}=    Check Product By Size, Color And Price
             Input Quantity Product
             IF    ${check_product_to_cart}
+                # Wait Until Element Is Visible    id:product-addtocart-button
                 Click Element    id:product-addtocart-button
             END
         END
@@ -209,25 +211,27 @@ Add Product To Cart By Color, Size And Price
 
 Go To Cart And Make A Payment
     [Documentation]    Proceeds to the checkout after adding products to the cart and saves the product information into an Excel file if the payment is successful.
-    Wait Until Element Is Visible    xpath://a[@class='action showcart']    35s
-    Click Element    xpath://a[@class='action showcart']
+    Wait Until Page Contains Element    xpath://a[@class='action showcart']    timeout=5s
+    Click Element When Visible    xpath://a[@class='action showcart']
 
-    Wait Until Element Is Visible    xpath://a[@class='action viewcart']    35s
-    Click Element    xpath://a[@class='action viewcart']
+    Wait Until Element Is Visible    xpath://a[@class='action viewcart']    timeout=5s
+    Click Element When Visible    xpath://a[@class='action viewcart']
 
     ${global_product_info}=    Save Infomation Product
 
     Click Button    xpath=//button[@data-role='proceed-to-checkout']
 
-    Wait Until Element Is Not Visible    xpath://div[@id="checkout-shipping-method-load"]    30s
-    Wait Until Element Is Visible    xpath://button[@data-role='opc-continue']    30s
-    Wait Until Element Is Enabled    xpath://button[@data-role='opc-continue']    30s
+    Wait Until Element Is Not Visible    xpath://div[@id="checkout-shipping-method-load"]    5s
+    Wait Until Element Is Visible    xpath://button[@data-role='opc-continue']    5s
+    Wait Until Element Is Enabled    xpath://button[@data-role='opc-continue']    5s
     Click Button    xpath://button[@data-role='opc-continue']
 
-    Wait Until Element Is Not Visible    xpath://div[@class="payment-method-billing-address"]    30s
-    Wait Until Element Is Visible    xpath://button[@class='action primary checkout']    30s
-    Wait Until Element Is Enabled    xpath://button[@class='action primary checkout']    30s
+    Wait Until Element Is Not Visible    xpath://div[@class="payment-method-billing-address"]    5s
+    Wait Until Element Is Visible    xpath://button[@class='action primary checkout']    5s
+    Wait Until Element Is Enabled    xpath://button[@class='action primary checkout']    5s
 
+    Wait Until Page Contains Element
+    ...    xpath://*[@id="checkout-payment-method-load"]/div/div/div[2]/div[2]/div[4]/div/button
     Wait Until Element Is Visible
     ...    xpath://*[@id="checkout-payment-method-load"]/div/div/div[2]/div[2]/div[4]/div/button
     ...    20s
@@ -279,7 +283,7 @@ Check Product By Size, Color And Price
     RETURN    ${True}
 
 Check Size Exists
-    [Documentation]    Verify if the specified size exists for the product.
+    [Documentation]    Verify if the specified size exists for the product
     [Arguments]    ${size}
     ${sizes}=    Get WebElements    css:.swatch-option.text
     ${size_found}=    Set Variable    ${FALSE}
@@ -295,7 +299,7 @@ Check Size Exists
     RETURN    ${size_found}
 
 Check Price Exists
-    [Documentation]    Verify if the product price falls within a specified range.
+    [Documentation]    Verify if the product price falls within a specified range
     ${below_price}=    Get In Arg    below_price
     ${below_price_value}=    Set Variable    ${below_price}[value]
 
@@ -325,7 +329,7 @@ Check Price Exists
     RETURN    ${price_found}
 
 Check Color Exists
-    [Documentation]    Verify if the specified color exists for the product.
+    [Documentation]    Verify if the specified color exists for the product
     [Arguments]    ${color}
     Log    Checking product color: ${color}
     ${colors}=    Get WebElements    css:.swatch-option.color
@@ -409,3 +413,8 @@ Save Infomation By Excel Files
     ...    Size=${size}
     ...    Color=${color}
     Append Rows To Worksheet    ${row}    header=True
+
+Log And Exit
+    [Arguments]    ${message}
+    Log    ${message}    level=ERROR
+    RETURN
