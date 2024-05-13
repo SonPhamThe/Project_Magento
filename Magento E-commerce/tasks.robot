@@ -13,6 +13,7 @@ Library             Collections
 Library             ConvertString
 Library             String
 Library             RPA.Windows
+Library             RPA.HTTP
 Library             RPA.Excel.Application
 Resource            resources/login_page.robot
 Resource            resources/mouse_action.robot
@@ -21,6 +22,11 @@ Suite Setup         Open Browser And Maximize Window    ${MAGENTO_URL}
 
 
 *** Variables ***
+${order_info}                   ${EMPTY}
+${global_product_info}          ${EMPTY}
+${color_product}                ${EMPTY}
+${size_product}                 ${EMPTY}
+
 ${MAGENTO_URL}                  https://magento.softwaretestingboard.com/
 ${HOME_PAGE_PRODUCT}            https://magento.softwaretestingboard.com/men/tops-men/jackets-men.html
 
@@ -57,7 +63,7 @@ ${WATCHES_GEAR_CATEGORY_ID}     ui-id-27
 Automated E-commerce Shopping
     Login With Magento Credentials
     Choose Each Product
-    # Add Product To Cart By Color, Size And Price
+    Add Product To Cart By Color, Size And Price
     Go To Cart And Make A Payment
     Close All Browsers
 
@@ -184,7 +190,7 @@ Choose Each Product
     END
 
 Add Product To Cart By Color, Size And Price
-    [Documentation]    Add the product to the cart based on the specified color and size.
+    [Documentation]    Add the product to the cart based on the specified color and size
     ${values}=    Get List Items    css:#limiter    values=True
     FOR    ${value}    IN    @{values}
         IF    ${value} > 12    Go To    ${HOME_PAGE_PRODUCT}
@@ -202,10 +208,44 @@ Add Product To Cart By Color, Size And Price
     END
 
 Go To Cart And Make A Payment
+    [Documentation]    Proceeds to the checkout after adding products to the cart and saves the product information into an Excel file if the payment is successful.
+    Wait Until Element Is Visible    xpath://a[@class='action showcart']    35s
     Click Element    xpath://a[@class='action showcart']
+
+    Wait Until Element Is Visible    xpath://a[@class='action viewcart']    35s
     Click Element    xpath://a[@class='action viewcart']
-    Save Infomation Product
-    Sleep    5s
+
+    ${global_product_info}=    Save Infomation Product
+
+    Click Button    xpath=//button[@data-role='proceed-to-checkout']
+
+    Wait Until Element Is Not Visible    xpath://div[@id="checkout-shipping-method-load"]    30s
+    Wait Until Element Is Visible    xpath://button[@data-role='opc-continue']    30s
+    Wait Until Element Is Enabled    xpath://button[@data-role='opc-continue']    30s
+    Click Button    xpath://button[@data-role='opc-continue']
+
+    Wait Until Element Is Not Visible    xpath://div[@class="payment-method-billing-address"]    30s
+    Wait Until Element Is Visible    xpath://button[@class='action primary checkout']    30s
+    Wait Until Element Is Enabled    xpath://button[@class='action primary checkout']    30s
+
+    Wait Until Element Is Visible
+    ...    xpath://*[@id="checkout-payment-method-load"]/div/div/div[2]/div[2]/div[4]/div/button
+    ...    20s
+    Click Button    xpath://*[@id="checkout-payment-method-load"]/div/div/div[2]/div[2]/div[4]/div/button
+
+    ${order_info}=    Check Status Payment And Get Order Number
+
+    IF    '${order_info['STATUS_PAYMENT']}' == 'True'
+        Create File Excel Data
+        FOR    ${product}    IN    @{global_product_info}
+            Save Infomation By Excel Files
+            ...    ${product}
+            ...    ${order_info}[order_number]
+            ...    ${color_product}
+            ...    ${size_product}
+        END
+        Save Workbook
+    END
 
 Get Product Links
     [Documentation]    Retrieve the links of all products listed on the current page.
@@ -218,12 +258,18 @@ Get Product Links
     RETURN    ${product_links}
 
 Check Product By Size, Color And Price
+    [Documentation]    Checks if the product matches the specified size, color, and price
+
     ${size}=    Get In Arg    size
     ${size_value}=    Set Variable    ${size}[value]
+    Set Global Variable    ${size_product}    ${size_value}
+
     ${size_exists}=    Check Size Exists    ${size_value}
 
     ${color}=    Get In Arg    color
     ${color_value}=    Set Variable    ${color}[value]
+    Set Global Variable    ${color_product}    ${color_value}
+
     ${color_exists}=    Check Color Exists    ${color_value}
 
     ${price_exists}=    Check Price Exists
@@ -259,13 +305,6 @@ Check Price Exists
     ${price}=    RPA.Browser.Selenium.Get Text
     ...    xpath://div[@class="product-info-main"]/div[@class="product-info-price"]/div/span/span/span/span
     ${price_value_money}=    Convert String To Money    ${price}
-
-    Log    ${price}
-    Log    ${price_value_money}
-    Log    ${below_price_value}
-    Log    ${above_price_value}
-
-    IF    ${price_value_money} > ${below_price_value}    Log    hehehehe
 
     ${price_found}=    Set Variable    ${FALSE}
 
@@ -303,6 +342,7 @@ Check Color Exists
     RETURN    ${color_found}
 
 Input Quantity Product
+    [Documentation]    Enters the specified quantity of the product into the corresponding field on the webpage
     ${quantity}=    Get In Arg    quantity
     ${quantity_value}=    Set Variable    ${quantity}[value]
 
@@ -310,14 +350,62 @@ Input Quantity Product
     Input Text    id:qty    ${quantity_value}
 
 Save Infomation Product
-    Sleep    6s
+    [Documentation]    Temporarily stores the product information such as name, price, and quantity of each item in the shopping cart
+    ${global_product_info}=    Create List
     Wait Until Element Is Visible    xpath://table[@id='shopping-cart-table']    timeout=30s
-    ${rows}=    Get Webelements     xpath://table[@id='shopping-cart-table']/tbody/tr
-    ${row_count}=    Get Length    ${rows}
-    Log    ${row_count}
-    FOR    ${number_rows}    IN RANGE    ${row_count}
-        ${index}=    ${number_rows} + ${1}
-        ${data}=    RPA.Browser.Selenium.Get Text    xpath://table[@id='shopping-cart-table']/tbody/tr[${number_rows}]/td[1]/div/strong
-    END
+    ${tbody}=    Get Webelements    xpath://table[@id='shopping-cart-table']/tbody
+    ${tbody_count}=    Get Length    ${tbody}
+    FOR    ${tbody_rows}    IN RANGE    0    ${tbody_count}
+        ${index}=    Evaluate    ${tbody_rows} + 1
+        ${name_product}=    RPA.Browser.Selenium.Get Text
+        ...    xpath://table[@id='shopping-cart-table']/tbody[${index}]/tr[1]/td[1]/div/strong
 
-   
+        ${price_product}=    RPA.Browser.Selenium.Get Text
+        ...    xpath://table[@id='shopping-cart-table']/tbody[${index}]/tr[1]/td[2]/span/span/span
+
+        ${quantity_product}=    Get Element Attribute
+        ...    xpath://table[@id='shopping-cart-table']/tbody[${index}]/tr[1]/td[3]/div/div/label/input
+        ...    value
+
+        ${product_info}=    Create Dictionary
+        ...    name_product=${name_product}
+        ...    price_product=${price_product}
+        ...    quantity_product=${quantity_product}
+        Append To List    ${global_product_info}    ${product_info}
+    END
+    RETURN    ${global_product_info}
+
+Check Status Payment And Get Order Number
+    [Documentation]    Checks the payment status and retrieves the order number if the payment is successful
+    ${is_visible}=    Run Keyword And Return Status
+    ...    Element Should Be Visible
+    ...    xpath://div[@class='checkout-success']
+    ${STATUS_PAYMENT}=    Set Variable    ${is_visible}
+    Log    ${is_visible}
+    Log    ${STATUS_PAYMENT}
+    ${order_number}=    RPA.Browser.Selenium.Get Text    xpath=//div[@class='checkout-success']//p//a//strong
+    Log    ${order_number}
+    ${order_info}=    Create Dictionary    order_number=${order_number}    STATUS_PAYMENT=${STATUS_PAYMENT}
+    RETURN    ${order_info}
+
+Create File Excel Data
+    [Documentation]    Creates a new Excel file to store product information and order numbers
+    Create Workbook    data_magento.xlsx
+    Set Worksheet Value    1    1    Name
+    Set Worksheet Value    1    2    Quantity
+    Set Worksheet Value    1    3    Price
+    Set Worksheet Value    1    4    Order Number
+    Set Worksheet Value    1    5    Size
+    Set Worksheet Value    1    6    Color
+
+Save Infomation By Excel Files
+    [Documentation]    Saves the information of each product along with the order number, color, and size into the Excel file
+    [Arguments]    ${product}    ${order_number}    ${color}    ${size}
+    ${row}=    Create Dictionary
+    ...    Name=${product['name_product']}
+    ...    Price=${product['price_product']}
+    ...    Quantity=${product['quantity_product']}
+    ...    Order Number=${order_number}
+    ...    Size=${size}
+    ...    Color=${color}
+    Append Rows To Worksheet    ${row}    header=True
